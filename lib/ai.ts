@@ -81,7 +81,7 @@ export async function streamChat(
   systemPrompt: string,
   signal?: AbortSignal
 ): Promise<ReadableStream<string>> {
-  const apiKey = process.env.DASHSCOPE_API_KEY
+  const apiKey = process.env.DASHSCOPE_API_KEY?.trim()
   if (!apiKey) throw new Error('DASHSCOPE_API_KEY not set')
 
   const res = await fetch(DASHSCOPE_API_URL, {

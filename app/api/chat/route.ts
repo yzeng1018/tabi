@@ -71,8 +71,8 @@ export async function POST(req: NextRequest) {
 function isValidRecommendation(obj: object): boolean {
   const r = obj as Record<string, unknown>
   return (
-    typeof r.flight === 'object' &&
-    typeof r.hotel === 'object' &&
+    r.flight !== null && typeof r.flight === 'object' &&
+    r.hotel !== null && typeof r.hotel === 'object' &&
     typeof r.summary === 'string'
   )
 }

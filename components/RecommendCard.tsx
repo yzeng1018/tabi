@@ -44,7 +44,7 @@ export default function RecommendCard({ card, onRevise }: Props) {
       <div className="rounded-2xl border border-gray-100 bg-white shadow-sm p-4">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">酒店</span>
-          <span className="text-xs text-gray-400">{'★'.repeat(Math.max(1, hotel.stars))}</span>
+          <span className="text-xs text-gray-400">{'★'.repeat(Math.min(5, Math.max(1, hotel.stars)))}</span>
         </div>
         <div className="text-lg font-semibold text-gray-800">{hotel.city}</div>
         <div className="mt-1 text-sm text-gray-500">
