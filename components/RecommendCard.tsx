@@ -8,6 +8,10 @@ interface Props {
   onRevise: () => void
 }
 
+// Shared class strings for the two button styles
+const BTN_PRIMARY = 'flex-1 rounded-xl bg-blue-500 text-white text-center py-2.5 text-sm font-medium transition-transform active:bg-blue-600 active:scale-95'
+const BTN_GHOST   = 'flex-1 rounded-xl border border-blue-500 text-blue-500 text-center py-2.5 text-sm font-medium transition-transform active:scale-95 active:opacity-80'
+
 export default function RecommendCard({ card, onRevise }: Props) {
   const { flight, hotel, summary, links } = card
 
@@ -30,14 +34,14 @@ export default function RecommendCard({ card, onRevise }: Props) {
         <div className="mt-1 text-sm text-gray-500">
           {flight.departDate} 出发 · {flight.returnDate} 返回
         </div>
-        <a
-          href={links.flight}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 block w-full rounded-xl bg-blue-500 text-white text-center py-2.5 text-sm font-medium active:bg-blue-600"
-        >
-          查机票
-        </a>
+        {/* Booking platform row — 同程 hidden when destination has no IATA mapping */}
+        <div className="mt-3 flex gap-2">
+          <a href={links.ctrip.flight}  target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>携程</a>
+          <a href={links.fliggy.flight} target="_blank" rel="noopener noreferrer" className={BTN_GHOST}>飞猪</a>
+          {links.tongcheng.flight && (
+            <a href={links.tongcheng.flight} target="_blank" rel="noopener noreferrer" className={BTN_GHOST}>同程</a>
+          )}
+        </div>
       </div>
 
       {/* Hotel card */}
@@ -50,14 +54,12 @@ export default function RecommendCard({ card, onRevise }: Props) {
         <div className="mt-1 text-sm text-gray-500">
           {hotel.checkin} 入住 · {hotel.checkout} 退房
         </div>
-        <a
-          href={links.hotel}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 block w-full rounded-xl bg-blue-500 text-white text-center py-2.5 text-sm font-medium active:bg-blue-600"
-        >
-          查酒店
-        </a>
+        {/* 3-platform booking row */}
+        <div className="mt-3 flex gap-2">
+          <a href={links.ctrip.hotel}     target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>携程</a>
+          <a href={links.fliggy.hotel}    target="_blank" rel="noopener noreferrer" className={BTN_GHOST}>飞猪</a>
+          <a href={links.tongcheng.hotel} target="_blank" rel="noopener noreferrer" className={BTN_GHOST}>同程</a>
+        </div>
       </div>
 
       {/* Revision prompt */}

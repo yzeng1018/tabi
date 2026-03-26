@@ -27,8 +27,9 @@ export interface RecommendationCard {
   }
   summary: string
   links: {
-    flight: string        // 携程机票深链
-    hotel: string         // 携程酒店深链
+    ctrip:     { flight: string; hotel: string }  // 携程
+    fliggy:    { flight: string; hotel: string }  // 飞猪
+    tongcheng: { flight: string | undefined; hotel: string }  // 同程 — flight undefined when city has no IATA mapping
   }
 }
 
