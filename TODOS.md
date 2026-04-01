@@ -6,30 +6,24 @@ Items captured here are deferred — not forgotten. Each entry has enough contex
 
 ## Click analytics on booking buttons
 
-**What:** Instrument the Ctrip / Fliggy / Skyscanner buttons in RecommendCard to log which platform the user taps.
+**What:** Instrument the 携程 / 飞猪 / 同程 buttons in RecommendCard to log which platform the user taps.
 
 **Why:** The success metric for the multi-platform deep link feature is ">20% of users click a non-Ctrip button." Without click tracking, this metric is literally unmeasurable. The feature ships blind.
 
-**Pros:** Makes the success metric real. Cheap to add. Data informs whether to invest in Fliggy/Skyscanner API integration next.
+**How:** Simplest implementation: Vercel Analytics `va('event', { platform: '飞猪', type: 'flight' })` on each anchor `onClick`. No backend needed — Vercel Analytics is already in the stack.
 
-**Cons:** Adds a logging dependency (Vercel Analytics, PostHog, or a custom endpoint). Minimal complexity.
+**Context:** The 3-platform deep link feature shipped 2026-03-26. This is the only blocker to making the success metric real. Data from this informs whether to invest in Skyscanner or other API integrations next.
 
-**Context:** The design doc (2026-03-26) defines the 20% threshold as the signal to proceed with real API integration. Without this data, the next decision cannot be made. Simplest implementation: a `POST /api/log` endpoint or `window.va('event', ...)` call on each anchor click.
-
-**Depends on:** Multi-platform deep links feature must ship first.
+**Depends on:** Nothing — can be done now.
 
 ---
 
 ## Skyscanner integration (deferred)
 
-**What:** Add Skyscanner as a 4th booking platform option for international routes.
+**What:** Add Skyscanner as a 4th booking platform for international routes.
 
-**Why:** Skyscanner has strong international flight coverage and brand recognition among international travelers. It would extend tabi's reach beyond the 3 Chinese OTAs.
+**Why:** Skyscanner has strong international coverage and is familiar to internationally-minded users.
 
-**Pros:** Covers international routes where Skyscanner has superior inventory vs Chinese OTAs. Differentiates tabi for internationally-minded users.
+**Context:** Deferred pending demand evidence. As of 2026-03-26 the 3-platform setup (携程/飞猪/同程) covers domestic and major international routes via Ctrip. The CITY_TO_IATA map is already implemented in `lib/booking.ts` — Skyscanner deep links would reuse it. The main open question is Chinese brand recognition ("天巡" vs Skyscanner).
 
-**Cons:** Requires CITY_TO_IATA mapping (~30+ cities, maintenance burden). Skyscanner button would only appear for international routes (domestic/international asymmetry). Chinese brand name "天巡" may not be as recognizable as the English "Skyscanner".
-
-**Context:** Deferred from MVP because Ctrip + Fliggy + 同程 all accept Chinese city names directly, eliminating IATA complexity. Skyscanner requires IATA airport codes (e.g., SHA, KIX). If >20% of users click non-Ctrip buttons, evaluate adding Skyscanner for international routes.
-
-**Depends on:** CITY_TO_IATA mapping implementation, demand evidence from current 3-platform setup.
+**Depends on:** Analytics data showing >20% non-Ctrip clicks, particularly on international routes.
